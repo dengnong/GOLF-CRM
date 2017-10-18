@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>xinzenchanpinl.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    <div class="alert alert-info">当前位置<b class="tip"></b>呼叫中心<b class="tip"></b>新增顾客</div>
+  
+  <form name="addproduct" action="/servlet/ProductServlet" method="post">
+  <input name="operation" type="hidden" id="operation" value="addproduct"/>
+    <p>
+      <label for="productnumber">产品号:</label>
+     <input type="text" value="输入产品号" name="productnumber" id="productnumber" 
+     style="color:#999999" />
+    </p>
+
+    <p>
+      <label for="productname">产品名:</label>
+      <input type="text" value="输入产品名" name="productname" id="productname"
+      style="color:#999999" />
+ 	</p>
+    <p>
+      <label for="product-validitydate">有效期:</label>
+     <input type="text" value="输入有效期(月)" name="product-validitydate" id="product-validitydate"
+      style="color:#999999" />
+    </p>
+    
+       <p>
+      <label for="productequity"> 产品权益:</label> 
+     <input type="text" value="输入产品权益" name="productequity" id="productequity"
+      style="color:#999999" />
+    </p>
+    
+       <p>
+      <label for="productweekday">平日权益:</label>
+     <input type="text" value="输入平日应扣权益" name="productweekday" id="productweekday"
+      style="color:#999999" />
+    </p>
+    
+       <p>
+      <label for="productholiday">假日权益:</label>
+     <input type="text" value="输入假日应扣权益" name="productholiday" is="productholiday"
+      style="color:#999999" />
+    </p>
+    
+      <p>
+      <label for="productprice">产品价格:</label>
+     <input type="text" value="输入价格(元)" name="productprice" id="productprice"
+      style="color:#999999" />
+    </p>
+    
+     <p>
+      <label for="productpeoplelimit">允许携带人数:</label>
+     <input type="text" value="输入人数" name="productpeoplelimit" id="productpeoplelimit"
+      style="color:#999999" />
+    </p>
+      
+    
+    <td><label>
+           <input type="submit" name="submit" value="submit"  >
+         </label></td>
+    
+      
+      
+<!-- 
+onFocus="if(value==defaultValue){value='';}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" 
+    <p class="login-submitjt">
+      <button type="submit" name="submit value=" class="login-button"></button>
+    </p>
+
+     -->
+</form>
+  </body>
+</html>

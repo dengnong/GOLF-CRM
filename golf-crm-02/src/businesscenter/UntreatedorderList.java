@@ -1,0 +1,184 @@
+package businesscenter;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import callcenter.TbOrder;
+import callcenter.TborderMgr;
+import businesscenter.Fax;
+import businesscenter.FaxMgr;
+
+
+public class UntreatedorderList extends HttpServlet {
+
+	/**
+	 * Constructor of the object.
+	 */
+	public UntreatedorderList() {
+		super();
+	}
+
+	/**
+	 * Destruction of the servlet. <br>
+	 */
+	public void destroy() {
+		super.destroy(); // Just puts "destroy" string in log
+		// Put your code here
+	}
+
+	/**
+	 * The doGet method of the servlet. <br>
+	 *
+	 * This method is called when a form has its tag value method equals to get.
+	 * 
+	 * @param request the request send by the client to the server
+	 * @param response the response send by the server to the client
+	 * @throws ServletException if an error occurred
+	 * @throws IOException if an error occurred
+	 */
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		processRequest(request,response);
+		
+	}
+
+	/**
+	 * The doPost method of the servlet. <br>
+	 *
+	 * This method is called when a form has its tag value method equals to post.
+	 * 
+	 * @param request the request send by the client to the server
+	 * @param response the response send by the server to the client
+	 * @throws ServletException if an error occurred
+	 * @throws IOException if an error occurred
+	 */
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+			processRequest(request,response);
+
+		
+	}
+	@SuppressWarnings("unused")
+	public void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException
+	{
+		System.out.println("come in UntreatedorderList");
+		response.setHeader("content-type", "text/html;charset=UTF-8");  
+		response.setCharacterEncoding("UTF-8");  
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html");
+		String operation = request.getParameter("operation");
+		System.out.println("operation:"+operation);
+		HttpSession session = request.getSession();
+		
+		if(operation.equals("deal"))
+		{
+			//String s = request.getParameter("ord_Number");
+			int ord_number=Integer.parseInt(request.getParameter("ord_Number"));
+			System.out.println("come in deal"+ ord_number);
+			request.setAttribute("ord_Number",ord_number);//
+			request.getRequestDispatcher("/GOLF/BusinesscenterPage/dealorder.jsp").forward(request, response);
+		}
+		if(operation.equals("sandfax"))
+		{
+			FaxMgr faxMgr = new FaxMgr();
+	  		//int ord_number = Integer.parseInt(String.valueOf(request.getAttribute("ord_Number")));
+			int ord_number = Integer.parseInt(request.getParameter("ord_Number"));
+			System.out.println(ord_number);
+			System.out.println("come in sandfax" + ord_number);
+			Fax fax = new Fax(); 
+			fax=FaxMgr.getFaxfromOrder(ord_number);
+			//fax = FaxMgr.getFaxfromOrder(ord_number);
+			System.out.println("cou_Number: "+ fax.getCou_Number() +"\n"
+					+ "cus_Phone: " +fax.getCus_Phone() + "\n"
+					+"ser.ServiceId: " + fax.getSer_ServiceID()+"\n"
+					+"ord_redate: " +fax.getOrd_ReDate()+"\n"
+					+"ord_Price: " + fax.getOrd_Price()+"\n");
+			if(FaxMgr.addFax(fax))
+			{
+				request.setAttribute("ord_Number",ord_number);
+				System.out.println("ord_number: " + ord_number);
+				request.getRequestDispatcher("../GOLF/BusinesscenterPage/subEquity.jsp").forward(request, response);
+			}
+			else{
+				System.out.println("failedaddfax");
+				request.setAttribute("ord_Number",ord_number);
+				request.getRequestDispatcher("../GOLF/BusinesscenterPage/dealorder.jsp").forward(request, response);
+			}
+				
+		}
+		if(operation.equals("subEquity"))
+		{
+			String ord_number = request.getParameter("ord_Number");
+			String pro_number = request.getParameter("pro_Number");
+			String shouldequity = request.getParameter("ord_shouldEquity");
+			int ord_Number 	= Integer.parseInt(ord_number);
+			int pro_Number 	= Integer.parseInt(pro_number);
+			int shouldEquity= Integer.parseInt(shouldequity);
+			System.out.println("come in subEquity!!!!!!");
+			System.out.println(ord_Number+" "+pro_Number+" "+shouldEquity);
+			if(TborderMgr.subEquity(ord_Number,pro_Number,shouldEquity))
+			{
+				request.setAttribute("ord_Number",ord_Number);
+				request.getRequestDispatcher("/GOLF/BusinesscenterPage/sandMessage.jsp").forward(request, response);
+			}
+			else{
+				System.out.println("failesubEquity");
+				request.setAttribute("ord_Number",ord_Number);
+				request.getRequestDispatcher("../GOLF/BusinesscenterPage/nonequityError.jsp").forward(request, response);
+			}
+		}
+		if(operation.equals("sandmes"))
+		{
+			System.out.println("come in sandmes!!!!!");
+			//int ord_number = Integer.parseInt(String.valueOf(request.getAttribute("ord_Number")));
+			int ord_number = Integer.parseInt(request.getParameter("ord_Number"));
+			System.out.println(ord_number);
+			int membernumber =0;
+			TborderMgr tborderMgr = new TborderMgr();
+			TbOrder tborder = TborderMgr.getTborder(ord_number);
+			membernumber = tborder.getOrd_Member();
+			
+			if(MessageMgr.addvipMessage(tborder))
+			{
+				if(membernumber>1)
+				{
+					if(MessageMgr.addcusMessage(ord_number))
+					{
+						System.out.println("DBupdate,addcusMessage");
+						request.getRequestDispatcher("/GOLF/BusinesscenterPage/endOrder.jsp").forward(request, response);
+					}
+				}
+				else
+				{
+					request.getRequestDispatcher("/GOLF/BusinesscenterPage/endOrder.jsp").forward(request, response);
+				}
+			}
+			else
+			{
+				System.out.println("failaddvipMessage");
+				request.setAttribute("ord_Number", ord_number);
+				request.getRequestDispatcher("/GOLF/BusinesscenterPage/sandMessage.jsp").forward(request, response);
+
+			}
+		}
+		
+		
+	}
+	
+
+	/**  
+	 * Initialization of the servlet. <br>
+	 *
+	 * @throws ServletException if an error occurs
+	 */
+	public void init() throws ServletException {
+		// Put your code here
+	}
+
+}

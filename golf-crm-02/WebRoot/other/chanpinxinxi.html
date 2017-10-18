@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../Styles/formui.css" />
+    <link rel="stylesheet" type="text/css" href="../Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../Styles/base.css"/>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <script type="text/javascript">
+        $(function () {
+            $('#center').hide();
+            $('#bottom').hide();
+            $('.top-next').click(function () {
+                $('#top').hide();
+                $('#center').show();
+            })
+            $('.center-next').click(function () {
+                $('#center').hide();
+                $('#bottom').show();
+            })
+            $('.center-prev').click(function () {
+                $('#center').hide();
+                $('#top').show();
+            })
+            $('.bottom-prev').click(function () {
+                $('#bottom').hide();
+                $('#center').show();
+            })
+        })
+    </script>
+    <style type="text/css">
+        .auto-style1 {
+            height: 26px;
+        }
+    </style>
+</head>
+<body bgcolor='#586689'>
+    <div class="alert alert-info">当前位置<b class="tip"></b>产品中心<b class="tip"></b>产品信息</div>
+    <br/>
+    <table width="107%" class="tb" id="top">
+      <thead>
+        <tr >
+          <th width="3%">产品号</th>
+          <th width="3%" align="center">产品名</th>
+          <th width="3%" align="center"><p >产品有效期（月）</p></th>
+          <th width="7%" align="center"><p >产品权益</p></th>
+          <th width="3%" align="center"><p >平日应扣权益</p></th>
+          <th width="4%" align="center"><p >假日应扣权益</p></th>
+          <th width="10%" align="center"><p >产品价格(元)</p></th>
+          <th width="10%" align="center"><p >携带人数上限</p></th>
+        </tr>
+      </thead>
+      
+      
+      
+    </table>
+    
+           
+        </tbody>
+    </table>
+</body>
+</html>
